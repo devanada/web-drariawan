@@ -388,7 +388,7 @@ const QuestionPage = (props: IQuestionProps) => {
       </div>
       <audio
         controls
-        className="absolute bottom-8 m-auto right-auto md:right-8"
+        className="absolute bottom-8 m-auto right-8 w-28 md:w-60"
         autoPlay
         loop
       >

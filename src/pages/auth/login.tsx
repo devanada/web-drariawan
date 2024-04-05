@@ -32,9 +32,11 @@ const Login = () => {
   async function onSubmit(data: LoginSchema) {
     try {
       const result = await userLogin(data);
+
       toast({
         description: `Halo ${result.data.name}, selamat datang kembali`,
       });
+
       addAuth(result.data, data.remember);
       setAxiosConfig(result.data.token);
       navigate("/");

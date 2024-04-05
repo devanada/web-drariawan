@@ -61,7 +61,9 @@ const routeWhitelist: Record<string, string[]> = {
 };
 
 const ProtectedRoute = () => {
-  const { token, role } = useAuthStore((state) => state);
+  const { token, role, isLoggedOut, isLoggedIn } = useAuthStore(
+    (state) => state
+  );
   const { pathname } = useLocation();
   const { toast } = useToast();
   const params = useParams();
@@ -71,23 +73,28 @@ const ProtectedRoute = () => {
       return <Outlet />;
     }
 
-    if (!routeWhitelist[role].includes(pathname)) {
+    if (routeWhitelist[role].includes(pathname)) return <Outlet />;
+
+    if (!isLoggedIn) {
       toast({
         description:
           "Anda tidak memiliki akses ke halaman ini, silahkan logout terlebih dahulu",
         variant: "destructive",
       });
-
-      if (role === "patient") {
-        return <Navigate to="/" />;
-      }
-
-      return <Navigate to="/dashboard" />;
-    } else {
-      return <Outlet />;
     }
+
+    if (role === "patient") return <Navigate to="/" />;
+    else return <Navigate to="/dashboard" />;
   } else {
     if (nonLoggedInAccess.includes(pathname)) return <Outlet />;
+
+    if (!isLoggedOut) {
+      toast({
+        description:
+          "Anda tidak memiliki akses ke halaman ini, silahkan login terlebih dahulu",
+        variant: "destructive",
+      });
+    }
 
     return <Navigate to="/" />;
   }

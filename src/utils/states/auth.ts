@@ -7,6 +7,8 @@ export interface AuthStore {
   token: string;
   name: string;
   role: string;
+  isLoggedOut: boolean;
+  isLoggedIn: boolean;
   addAuth: (data: IUserPayload, remember: boolean) => void;
   resetAuth: () => void;
 }
@@ -15,6 +17,8 @@ export const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   token: Cookies.get("token") ?? sessionStorage.getItem("token") ?? "",
   name: Cookies.get("userName") ?? sessionStorage.getItem("userName") ?? "",
   role: Cookies.get("userRole") ?? sessionStorage.getItem("userRole") ?? "",
+  isLoggedOut: false,
+  isLoggedIn: false,
   addAuth: (data, remember) =>
     set(() => {
       if (remember) {
@@ -27,7 +31,12 @@ export const authStoreCreator: StateCreator<AuthStore> = (set) => ({
         sessionStorage.setItem("userRole", data.role);
       }
 
-      return { token: data.token, name: data.name, role: data.role };
+      return {
+        token: data.token,
+        name: data.name,
+        role: data.role,
+        isLoggedIn: true,
+      };
     }),
   resetAuth: () =>
     set(() => {
@@ -35,6 +44,7 @@ export const authStoreCreator: StateCreator<AuthStore> = (set) => ({
       Cookies.remove("userName");
       Cookies.remove("userRole");
       sessionStorage.clear();
-      return { token: "", name: "", role: "" };
+
+      return { token: "", name: "", role: "", isLoggedOut: true };
     }),
 });

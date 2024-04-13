@@ -6,6 +6,7 @@ import { useAuthStore } from "@/utils/states";
 
 const nonLoggedInAccess = [
   "/",
+  "/contact-us",
   "/login",
   "/register",
   "/dashboard/login",
